@@ -11,8 +11,14 @@ export const CountContext = createContext<CountContextProps | undefined>(undefin
 export const CountProvider = ({ children }: { children: ReactNode }) => {
   const [count, setCount] = useState<number>(0)
 
-  const increment: () => void = () => setCount((count) => count + 1)
-  const decrement: () => void = () => setCount((count) => (count > 0 ? count - 1 : 0))
+  // Explicitly declare with type annotations
+  const increment: () => void = () => {
+    setCount((prevCount) => prevCount + 1)
+  }
+
+  const decrement: () => void = () => {
+    setCount((prevCount) => (prevCount > 0 ? prevCount - 1 : 0))
+  }
 
   return (
     <CountContext.Provider value={{ count, increment, decrement }}>
@@ -21,7 +27,7 @@ export const CountProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
-export const useCount = () => {
+export const useCount = (): CountContextProps => {
   const context = useContext(CountContext)
 
   if (!context) {
